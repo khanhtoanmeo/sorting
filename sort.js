@@ -65,6 +65,10 @@ class Sort {
     }
     return merge(this.mergeSort(arr1), this.mergeSort(arr2));
   }
+
+  static quickSort(arr) {
+    return pivot(arr);
+  }
 }
 
 function merge(arr1, arr2) {
@@ -89,5 +93,27 @@ function merge(arr1, arr2) {
   return newArr;
 }
 
-const arr = randomArray(100);
-console.log(Sort.mergeSort(arr));
+function pivot(array) {
+  if (array.length === 0 || array.length === 1) return array;
+  const pivotElement = array[0];
+  let lessThanCount = 0;
+
+  for (let i = 1; i < array.length; i++) {
+    if (array[i] <= pivotElement) {
+      lessThanCount += 1;
+      swap(array, i, lessThanCount);
+    }
+  }
+  swap(array, lessThanCount, 0);
+
+  if (lessThanCount > 0) {
+    return pivot(array.slice(0, lessThanCount))
+      .concat([array[lessThanCount]])
+      .concat(pivot(array.slice(lessThanCount + 1)));
+  }
+
+  return pivot(array.slice(0, 1)).concat(pivot(array.slice(lessThanCount + 1)));
+}
+
+const arr = new randomArray(100);
+console.log(Sort.quickSort(arr).length);
