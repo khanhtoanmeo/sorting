@@ -69,6 +69,21 @@ class Sort {
   static quickSort(arr) {
     return pivot(arr);
   }
+
+  static radixSort(arr) {
+    const maxDigit = digitCount(Math.max(...arr));
+    for (let i = 0; i < maxDigit; i++) {
+      // let buckets = [[], [], [], [], [], [], [], [], [], []];
+      const buckets = Array.from({ length: 10 }, () => []);
+      for (let j = 0; j < arr.length; j++) {
+        const curNum = arr[j];
+        const digit = getDigitAt(curNum, i);
+        buckets[digit].push(curNum);
+      }
+      arr = buckets.reduce((pre, cur) => pre.concat(cur), []);
+    }
+    return arr;
+  }
 }
 
 function merge(arr1, arr2) {
@@ -115,5 +130,15 @@ function pivot(array) {
   return pivot(array.slice(0, 1)).concat(pivot(array.slice(lessThanCount + 1)));
 }
 
-const arr = new randomArray(100);
-console.log(Sort.quickSort(arr).length);
+function digitCount(num) {
+  return `${num}`.length;
+}
+
+function getDigitAt(num, index) {
+  const numStr = num.toString();
+  return +numStr[numStr.length - 1 - index] || 0;
+}
+
+const arr = new randomArray(100000);
+
+console.log(Sort.radixSort(arr));
